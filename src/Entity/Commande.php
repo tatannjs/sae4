@@ -13,7 +13,11 @@ class Commande
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Statut $Id_Statut = null;
+
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Producteur $Id_Prod = null;
 
@@ -21,13 +25,22 @@ class Commande
     #[ORM\JoinColumn(nullable: false)]
     private ?Utilisateur $Id_Uti = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Statut $Id_Statut = null;
-
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+
+    public function getIdStatut(): ?Statut
+    {
+        return $this->Id_Statut;
+    }
+
+    public function setIdStatut(?Statut $Id_Statut): static
+    {
+        $this->Id_Statut = $Id_Statut;
+
+        return $this;
     }
 
     public function getIdProd(): ?Producteur
@@ -35,7 +48,7 @@ class Commande
         return $this->Id_Prod;
     }
 
-    public function setIdProd(Producteur $Id_Prod): static
+    public function setIdProd(?Producteur $Id_Prod): static
     {
         $this->Id_Prod = $Id_Prod;
 
@@ -50,18 +63,6 @@ class Commande
     public function setIdUti(?Utilisateur $Id_Uti): static
     {
         $this->Id_Uti = $Id_Uti;
-
-        return $this;
-    }
-
-    public function getIdStatut(): ?Statut
-    {
-        return $this->Id_Statut;
-    }
-
-    public function setIdStatut(?Statut $Id_Statut): static
-    {
-        $this->Id_Statut = $Id_Statut;
 
         return $this;
     }
