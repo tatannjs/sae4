@@ -3,10 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\UtilisateurRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-class Utilisateur
+class Utilisateur implements UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -91,5 +94,42 @@ class Utilisateur
         $this->Pwd_Uti = $Pwd_Uti;
 
         return $this;
+    }
+
+    public function isProd(EntityManager $entityManager): bool{
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $queryBuilder->select('u')
+            ->from(Producteur::class, 'u')
+            ->where('u.id = :id')
+            ->setParameter('id', $this->getId());
+        $query = $queryBuilder->getQuery();
+        $result = $query->getResult();
+        return count($result) > 0;
+    }
+
+    public function isAdmin(EntityManager $entityManager){
+        $queryBuilder = $entityManager->createQueryBuilder();
+        $queryBuilder->select('u')
+            ->from(Administrateur::class, 'u')
+            ->where('u.id = :id')
+            ->setParameter('id', $this->getId());
+        $query = $queryBuilder->getQuery();
+        $result = $query->getResult();
+        return count($result) > 0;
+    }
+
+    public function getRoles(): array
+    {
+        throw new \LogicException('Not implemented');
+    }
+
+    public function eraseCredentials(): void
+    {
+        throw new \LogicException('Not implemented');
+    }
+
+    public function getUserIdentifier(): string
+    {
+        throw new \LogicException('Not implemented');
     }
 }
