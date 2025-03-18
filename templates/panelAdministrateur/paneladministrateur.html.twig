@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Panel Administrateur{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <!-- En-tête -->
+        <div class="d-flex justify-content-between align-items-center my-4">
+            <h1 class="h3">Gestion des utilisateurs</h1>
+            {# <a href="{{ path('app_admin_create_user') }}" class="btn btn-primary">Ajouter un utilisateur</a> #}
+        </div>
+
+        <!-- Vignettes des utilisateurs -->
+
+        <div class="row g-3">
+             {% for user in users %}
+                 <div class="col-md-4">
+                     <div class="card shadow-sm h-100 border border-success">
+                         <div class="card-body">
+                             <h5 class="card-title">{{ user.getPrenomUti() }} {{ user.getNomUti()|upper }}</h5>
+                             <p class="card-text">
+                                 {{ user.getMailUti() }}<br>
+                                 {{ user.getAdrUti() }}<br>
+                                {# {% if user.getProducteur() %}
+                                    <strong>Profession :</strong> {{ user.getProducteur().getProfProd() }}
+                                {% else %}
+                                    <strong>Profession :</strong> Client
+                                {% endif %} #}
+                            </p>
+                            {# <a href="{{ path('app_admin_edit_user', {id: user.getId()}) }}"
+                               class="btn btn-sm btn-primary">Modifier</a> #}
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <p class="text-center text-muted">Aucun utilisateur trouvé.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
