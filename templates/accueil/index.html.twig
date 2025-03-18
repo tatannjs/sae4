@@ -3,22 +3,53 @@
 {% block title %}Hello AccueilController!{% endblock %}
 
 {% block sidebar %}
-
+    <h1>Filter : </h1>
+    <input type="checkbox" name="liste_filtre" id="liste_filtre">Par profession </input><br>
+    <select name="pets" id="pet-select">
+        <option value="">Sélectionner une profession</option>
+        <option value="Agriculteur">Agriculteur</option>
+        <option value="Vigneron">Vigneron</option>
+        <option value="Maraîcher">Maraîcher</option>
+        <option value="Apiculteur">Apiculteur</option>
+        <option value="Éleveur">Éleveur de volaille</option>
+        <option value="Viticulteur">Viticulteur</option>
+        <option value="Pépiniériste">Pépiniériste</option>
+    </select>
+    <br>
+    <input type="checkbox" name="liste_filtre" id="liste_filtre">Par lieu </input><br>
+    <input type="text" name="ville" id="ville" aria-valuetext="">Entrez un code postal </input><br>
+    <input type="checkbox" name="liste_filtre" id="liste_filtre">Autour de chez moi (activez la localisation) </input>
 {% endblock %}
 
 {% block content %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <style>
+        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+        .producteur-row { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .producteur-card { border: 1px solid #ddd; padding: 10px; width: 30%; }
+    </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div class="example-wrapper">
+        <h1>Liste des Producteurs</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/ethan/Desktop/SAE/src/Controller/AccueilController.php</code></li>
-        <li>Your template at <code>C:/Users/ethan/Desktop/SAE/templates/accueil/index.html.twig</code></li>
-    </ul>
-</div>
+        {% if producteurs is not empty %}
+            {% for i in range(0, producteurs|length, 3) %}
+                <div class="producteur-row">
+                    {% for j in range(0, 3) %}
+                        {% set index = i + j %}
+                        {% if producteurs[index] is defined %}
+                            {% set producteur = producteurs[index] %}
+                            <div class="producteur-card">
+                                <h2>{{ producteur.getIdUti().getNomUti() }}</h2>
+                                <p>Profession: {{ producteur.getProfProd() }}</p>
+                                <p>Adresse: {{ producteur.getIdUti().getAdrUti() }}</p>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Aucun producteur disponible.</p>
+        {% endif %}
+    </div>
 {% endblock %}
